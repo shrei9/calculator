@@ -1,30 +1,27 @@
-let a = '0', b = '0', isActioned = false, operator = '';
 const display = document.querySelector(".input");
 const interfaceDiv = document.querySelector('.interface');
 const buttons = document.querySelectorAll('button');
 
+let a = '0', b = '0',
+    isActioned = false,
+    operator = '';
+
+const MAX_DISPLAY_LENGTH = 9, MAX_RESULT = 10000000;
+
 function sum(a, b) {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    return '' + (a + b);
+    return (parseFloat(a) + parseFloat(b)).toString();
 }
 
 function subtract(a, b) {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    return '' + (a - b);
+    return (parseFloat(a) - parseFloat(b)).toString();
 }
 
 function multiply(a, b) {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    return '' + (a * b);
+    return (parseFloat(a) * parseFloat(b)).toString();
 }
 
 function divide(a, b) {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    return '' + (a / b);
+    return (parseFloat(a) / parseFloat(b)).toString();
 }
 
 function operate(a, operator, b) {
@@ -37,196 +34,120 @@ function operate(a, operator, b) {
     }
 }
 
-function executioner(e) {
-    console.log(e.key);
+function clearDisplay() {
+    display.textContent = '0';
+}
 
-    //NUMBERS:
+function handleOperand(input) {
+    if (display.textContent === '0') display.textContent = '';
+    if (display.textContent.length <= MAX_DISPLAY_LENGTH) display.textContent += input;
+}
 
-    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('numbers')) {
-        switch (e.target.textContent) {
-            case '0':
-            case `1`:
-            case `2`:
-            case `3`:
-            case `4`:
-            case `5`:
-            case `6`:
-            case `7`:
-            case `8`:
-            case `9`: {
-                if (display.textContent === '0') display.textContent = '';
-                if (display.textContent.length <= 9)
-                    display.textContent += e.target.textContent;
-                break;
-            }
-        }
-    }
-
-    //ACTION:
-
-    if (e.target.tagName === 'BUTTON' && e.target.classList.contains('action')) {
-
-        switch (e.target.textContent) {
-            case `.`:
-                if ((display.textContent.match(/[0-9]/g)) && !(display.textContent.includes('.')))
-                    display.textContent += '.';
-                break;
-
-            case 'C/AC':
-                clearDisplay();
-                isActioned = false;
-                break;
-
-            case `⌫`:
-                display.textContent = display.textContent.slice(0, -1);
-                if (display.textContent === '') display.textContent = '0';
-                break;
-
-            case '÷':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'divide';
-                }
-                break;
-
-            case '✖':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'multiply';
-                }
-                break;
-
-            case '+':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'sum';
-                }
-                break;
-
-            case '-':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'subtract';
-                }
-                break;
-
-            case "=":
-                if (isActioned) {
-                    b = parseFloat(display.textContent);
-                    if (b === 0) return;
-                    a = operate(a, operator, b);
-                    if (parseFloat(a) > 10000000) a = '99999999';
-                    display.textContent = '' + parseFloat(a).toFixed(2);
-                    isActioned = false;
-                    break;
-                }
-        }
-    }
-
-    // KB SUPPORT
-    if (e.key !== null && e.key !== undefined) {
-        switch (e.key) {
-            case '0':
-            case `1`:
-            case `2`:
-            case `3`:
-            case `4`:
-            case `5`:
-            case `6`:
-            case `7`:
-            case `8`:
-            case `9`: {
-                if (display.textContent === '0') display.textContent = '';
-                if (display.textContent.length <= 9)
-                    display.textContent += e.key;
-                break;
-            }
-
-            case `.`:
-                if ((display.textContent.match(/[0-9]/g)) && !(display.textContent.includes('.')))
-                    display.textContent += '.';
-                break;
-
-            case 'C/AC':
-                clearDisplay();
-                isActioned = false;
-                break;
-
-            case `⌫`:
-                display.textContent = display.textContent.slice(0, -1);
-                if (display.textContent === '') display.textContent = '0';
-                break;
-
-            case '÷':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'divide';
-                }
-                break;
-
-            case '*':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'multiply';
-                }
-                break;
-
-            case '+':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'sum';
-                }
-                break;
-
-            case '-':
-                if (!isActioned) {
-                    a = parseFloat(display.textContent);
-                    isActioned = true; //dupa prima operatie punem flag ca sa luam b
-                    clearDisplay();
-                    operator = 'subtract';
-                }
-                break;
-
-            case "=":
-                if (isActioned) {
-                    b = parseFloat(display.textContent);
-                    if (b === 0) return;
-                    a = operate(a, operator, b);
-                    if (parseFloat(a) > 10000000) a = '99999999';
-                    display.textContent = '' + parseFloat(a).toFixed(2);
-                    isActioned = false;
-                    break;
-                }
-
-            case 'Enter':
-                if (isActioned) {
-                    b = parseFloat(display.textContent);
-                    if (b === 0) return;
-                    a = operate(a, operator, b);
-                    if (parseFloat(a) > 10000000) a = '99999999';
-                    display.textContent = '' + parseFloat(a).toFixed(2);
-                    isActioned = false;
-                    break;
-                }
-        }
+function executeOperation(op) {
+    if (!isActioned) {
+        a = parseFloat(display.textContent);
+        isActioned = true;
+        clearDisplay();
+        operator = op;
     }
 }
 
+function handleAction(input) {
+    switch (input) {
+        case '.':
+            if ((display.textContent.match(/[0-9]/g)) && !(display.textContent.includes('.')))
+                display.textContent += '.';
+            break;
 
+        case 'C/AC':
+            clearDisplay();
+            isActioned = false;
+            break;
+
+        case '⌫':
+            display.textContent = display.textContent.slice(0, -1) || '0';
+            break;
+
+        case '=':
+            if (isActioned) {
+                b = parseFloat(display.textContent);
+                if (b === 0) return;
+                a = operate(a, operator, b);
+                if (parseFloat(a) > MAX_RESULT) a = '99999999';
+                display.textContent = parseFloat(a).toFixed(2);
+                isActioned = false;
+            }
+            break;
+
+        default:
+            executeOperation(input);
+            break;
+    }
+}
+
+function executioner(e) {
+    if (e.target.tagName === 'BUTTON') {
+        const input = e.target.textContent;
+
+        if (e.target.classList.contains('numbers')) {
+            handleOperand(input);
+        } else if (e.target.classList.contains('action')) {
+            handleAction(input);
+        }
+    }
+
+    if (e.key !== null && e.key !== undefined) {
+        switch (e.key) {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                handleOperand(e.key);
+                break;
+
+            case '.':
+            case 'C':
+            case 'c':
+                handleAction(e.key === 'c' ? 'C/AC' : e.key);
+                break;
+
+            case 'Backspace':
+                handleAction('⌫');
+                break;
+
+            case '*':
+                executeOperation('multiply');
+                break;
+
+            case '/':
+            case '÷':
+                executeOperation('divide');
+                break;
+
+            case '+':
+                executeOperation('sum');
+                break;
+
+            case '-':
+                executeOperation('subtract');
+                break;
+
+            case '=':
+            case 'Enter':
+                handleAction('=');
+                break;
+
+            default:
+                break;
+        }
+    }
+}
 
 interfaceDiv.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -237,8 +158,3 @@ document.addEventListener('keydown', (e) => {
     e.stopPropagation();
     executioner(e);
 });
-
-
-function clearDisplay() {
-    display.textContent = '0';
-}
