@@ -6,6 +6,13 @@ let a = '0', b = '0',
     isActioned = false,
     operator = '';
 
+const operatorMap = {
+    '÷': 'divide',
+    '✖': 'multiply',
+    '+': 'sum',
+    '-': 'subtract'
+};
+
 const MAX_DISPLAY_LENGTH = 9, MAX_RESULT = 10000000;
 
 function sum(a, b) {
@@ -47,8 +54,8 @@ function executeOperation(op) {
     if (!isActioned) {
         a = parseFloat(display.textContent);
         isActioned = true;
-        clearDisplay();
         operator = op;
+        clearDisplay();
     }
 }
 
@@ -71,6 +78,7 @@ function handleAction(input) {
         case '=':
             if (isActioned) {
                 b = parseFloat(display.textContent);
+                console.log(b);
                 if (b === 0) return;
                 a = operate(a, operator, b);
                 if (parseFloat(a) > MAX_RESULT) a = '99999999';
@@ -80,14 +88,14 @@ function handleAction(input) {
             break;
 
         default:
-            executeOperation(input);
+            executeOperation(operatorMap[input]);
             break;
     }
 }
 
 function executioner(e) {
     if (e.target.tagName === 'BUTTON') {
-        const input = e.target.textContent;
+        let input = e.target.textContent;
 
         if (e.target.classList.contains('numbers')) {
             handleOperand(input);
