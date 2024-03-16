@@ -46,11 +46,13 @@ function clearDisplay() {
 }
 
 function handleOperand(input) {
+    console.log('Operand:', input);
     if (display.textContent === '0') display.textContent = '';
     if (display.textContent.length <= MAX_DISPLAY_LENGTH) display.textContent += input;
 }
 
 function executeOperation(op) {
+    console.log('Operation:', op);
     if (!isActioned) {
         a = parseFloat(display.textContent);
         isActioned = true;
@@ -60,6 +62,7 @@ function executeOperation(op) {
 }
 
 function handleAction(input) {
+    console.log('Action:', input);
     switch (input) {
         case '.':
             if ((display.textContent.match(/[0-9]/g)) && !(display.textContent.includes('.')))
@@ -94,6 +97,7 @@ function handleAction(input) {
 }
 
 function executioner(e) {
+    console.log('Event:', e);
     if (e.target.tagName === 'BUTTON') {
         let input = e.target.textContent;
 
